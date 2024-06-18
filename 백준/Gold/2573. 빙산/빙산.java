@@ -1,4 +1,3 @@
-
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
@@ -70,8 +69,7 @@ public class Main {
 			// 빙하 녹이기 
 			for(int i =0; i <N; i++) {
 				for(int j = 0; j <M; j++) {
-//					int curr = map[i][j];
-	//				System.out.println(i+", "+j+"에서 curr: "+curr);
+
 					if(map[i][j] > 0) {
 						
 						// 상하좌우 0 개수 
@@ -85,7 +83,6 @@ public class Main {
 							if(map[nr][nc] == 0) cnt++;	
 						}
 						
-	//					System.out.println(i+", "+j+"에서 cnt: "+cnt);
 						// map[i][j]가 cnt보다 크거나 같을 때는 cnt를 뺀 값으로 갱신하고,
 						// 작을 때는 0으로 갱신
 						if(map[i][j] >= cnt) {						
@@ -96,21 +93,13 @@ public class Main {
 						// 이미 녹은 곳을 표시해줘야 새로운 map[i][j]에 영향 주지 않음
 						melted[i][j] = true;
 						
-	//					System.out.println("===============");
 					}
 				}
 			}// for문
-
-			// 확인
-//			System.out.println(ans+"년차: ");
-//			for(int i = 0; i <N; i++) {
-//				for(int j = 0; j <M; j++) {
-//					System.out.print(map[i][j]+" ");
-//				}System.out.println();
-//			}
 			
 			
-			// 1년이 지나 녹은 후 dfs
+			// 1년이 지나 녹은 상태에서 
+			// bfs로 빙하 덩어리 개수 세기
 			// parts: 빙하 덩어리 개수
 			int parts= 0; 
 			for(int i =0 ; i <N; i++) {
