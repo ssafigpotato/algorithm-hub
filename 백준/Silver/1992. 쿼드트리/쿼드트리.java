@@ -1,5 +1,4 @@
 
-
 import java.util.Scanner;
 
 public class Main {
@@ -8,10 +7,10 @@ public class Main {
 	static StringBuilder sb;
 	static void recursion(int size, int r, int c) {
 		// 재귀를 돌리다가 한변의 길이가 1이되면 return
-		if(size == 1) {
-			// size가 1일 때 map[r][c]를 안 넣어줄 경우
-			// ((110())(0010)1(0001)) 이렇게 나옴 
-			sb.append(map[r][c]);
+		if(size == 0) {
+//			sb.append(map[r][c]);
+			// 이걸 안하고 싶으면 size == 1일 때는 for문안에 들어가서 sum을 검사하도록 냅두고, 
+			// size == 0일 때 끝내는걸로 하면 될듯!
 			return; 
 		}
 		
@@ -59,6 +58,7 @@ public class Main {
 
 		
 		recursion(N,0,0);
+		
 		System.out.println(sb.toString());
 		
 		sc.close();
