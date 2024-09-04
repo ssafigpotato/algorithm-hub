@@ -77,7 +77,7 @@ class Solution {
                     que.offer(new location(nr,nc));
                 }
                 // X일때는 뭐가 와도 괜찮으니까 굳이 탐색 x
-             
+                // else { return 1; } // 이거 하면 틀리게 나옴... 탐색 임의로 멈추게하니까! 그냥 아무 작업도 하지 않고 다음 반복문으로 넘어가게 해야함
                 
             }
         }
