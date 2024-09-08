@@ -13,7 +13,7 @@ public class Solution {
 	static boolean[][]visited; // 방문한 경로 체크
 	static int [][]map; // 디저트 카페 지역
 	// 대각선으로 돌아야함
-	static int []dr = {1,1,-1,-1};
+	static int []dr = {1,1,-1,-1}; // 우하 좌하 좌상 우상
 	static int []dc = {1,-1,-1,1};
 	static int max; // 디저트를 가장 많이 먹을 때의 디저트 수
 	static void dfs(int r, int c, int startR, int startC, int len, int dir) {
@@ -63,15 +63,17 @@ public class Solution {
 			}
 			// 입력 끝
 			max = -1; // 초기화
+			visited = new boolean[N][N];
+			dessert = new boolean[101];
 			
 			for(int i = 0; i <N; i++) {
 				for(int j = 0; j <N; j++) {
-					visited = new boolean[N][N];
-					dessert = new boolean[101];
 					visited[i][j] = true;
 					dessert[map[i][j]] = true;
 					dfs(i,j,i,j,1,0);
-//				
+					visited[i][j] = false;
+					dessert[map[i][j]] = false;
+							
 				}
 			}
 			
