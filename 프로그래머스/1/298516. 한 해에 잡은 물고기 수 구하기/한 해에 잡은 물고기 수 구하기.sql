@@ -1,5 +1,4 @@
 -- 코드를 작성해주세요
-SELECT count(*) AS FISH_COUNT
+SELECT count(ID) AS FISH_COUNT
 FROM FISH_INFO
-WHERE TIME LIKE '2021%'
-
+WHERE substr(TIME,1,4) = 2021;
