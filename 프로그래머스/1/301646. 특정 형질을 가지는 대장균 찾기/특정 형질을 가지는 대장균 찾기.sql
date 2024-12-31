@@ -1,5 +1,6 @@
 -- 코드를 작성해주세요
+-- 1번 형질 첫번째자리(1), 2번 형질 2번째자리(10), 3번형질 3번째 자리(100), 4번형질 4번째 자리(1000)
 SELECT count(ID) AS COUNT
 FROM ECOLI_DATA
-WHERE GENOTYPE & 2 = 0
-AND (GENOTYPE & 1 >= 1 OR GENOTYPE & 4 >= 1)
+WHERE GENOTYPE & 2 = 0  -- 2번 형질을 보유하지 않아야함. 1 0 인 2로 비트연산 해서 0이 나오도록
+    AND (GENOTYPE & 1 <> 0 OR GENOTYPE & 4 <> 0); -- 1번,3번 형질 보유해야함(0이 아니어야함). 1 과 1 0 0 으로 비트연산 값이 0이 아님 
