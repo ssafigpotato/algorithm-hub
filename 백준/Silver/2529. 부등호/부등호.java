@@ -10,7 +10,7 @@ public class Main {
 	static boolean[]visited;
 	// int로 하면 numberFormat~~에러 뜸 
 	static long max = 0;
-	static long min = Long.MAX_VALUE;
+	static long min = Long.MAX_VALUE; // <-- Integer.MAX_VALUE하면 테캐 몇개 틀림!! 
 	// 중복 없이, 숫자 고르기 순서 중요!
 	static void backtracking(int depth) {
 		String ans = "";
@@ -66,9 +66,11 @@ public class Main {
 //		System.out.println(max);
 //		System.out.println(min);
 		
+		// max값 min값 출력 
 		int max_len = Long.toString(max).length();
+		String zero = "0";
+		
 		if(max_len < K+1) {
-			String zero = "0";
 			System.out.println(zero.repeat(K+1-max_len)+max);
 		}else if(max_len == K+1) {
 			System.out.println(max);
@@ -76,7 +78,6 @@ public class Main {
 		
 		int min_len = Long.toString(min).length();
 		if(min_len < K+1) {
-			String zero = "0";
 			System.out.println(zero.repeat(K+1-min_len)+min);
 		}else if(min_len == K+1) {
 			System.out.println(min);
