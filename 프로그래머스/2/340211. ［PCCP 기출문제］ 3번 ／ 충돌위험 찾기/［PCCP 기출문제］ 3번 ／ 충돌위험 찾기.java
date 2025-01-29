@@ -1,6 +1,12 @@
 import java.util.*;
 
 class Solution {
+    // sol) 
+    // 1. 포인트 위치를 매핑
+    // 2. 포인트 위치를 기반으로 로봇이 이동하는 경로에 따라 bfs
+    //    bfs를 하는 동안 각 초마다 id번 로봇이 어디에 위치해있는지 기록
+    // 3. 초당 로봇의 위치기록을 토대로 
+    //    같은 시간에 같은 위치에 여러대의 로봇이 존재하는 경우 충돌 위험 +1
     static class Location {
         int r, c, id;
         Location(int r, int c, int id){
@@ -26,11 +32,11 @@ class Solution {
         while (!que.isEmpty()) {
             Location curr = que.poll();
             
-            // 현재 초(time)에서 이미 같은 위치에 같은 로봇이 기록되었는지 확인
-            // 예제 3번처럼 여러 포인트 거치는 경우 도착지점이자 새로운 시작지점인 포인트에서 위치가 중복으로 기록되는것 방지 
+            // 현재 초에서 이미 같은 위치에 같은 로봇이 기록되었는지 확인
+            // 예제 3번처럼 여러 포인트 거치는 경우 '도착지점이자 새로운 시작지점'인 포인트에서 위치가 중복으로 기록되는것 방지 
             if (locMap.containsKey(time)) {
                 boolean flag = false;
-                for (Location loc : locMap.get(time)) {
+                for (Location loc : locMap.get(time)) { // 해당 시간대에 이미 기록된 같은 위치의 같은 로봇이 있으면 break;
                     if (loc.r == curr.r && loc.c == curr.c && loc.id == id) {
                         flag = true;
                         break;
@@ -40,21 +46,17 @@ class Solution {
                     locMap.get(time).add(new Location(curr.r, curr.c, id));
                 }
             } else {
+                // 시간당 로봇의 위치 기록 
                 locMap.put(time, new ArrayList<>());
                 locMap.get(time).add(new Location(curr.r, curr.c, id));
             }
             
-            
-            // 목적지 도달시 종료! 
-            // if (curr.r == end.r && curr.c == end.c) return;
 
-            // 초당 로봇의 위치 기록 
-            // locMap.putIfAbsent(time, new ArrayList<>());
-            // locMap.get(time).add(new Location(curr.r, curr.c, id));
-
-            // 목적지 도달 시 종료 // <-- 이게 여기있으면 도달 후에도 또 map에 넣게 됨!!
+            // 목적지 도달 시 종료 
+            // <-- 수정) 이게 여기있으면 도달 후에도 또 map에 넣게 됨!!
             // 예제 3번처럼 여러 포인트를 거치는 경우 중간 지점에서 위치및 아이디가 중복으로 저장됨! 
-            // 를 위해 위에 적었더니 마지막 도달 위치에서 충돌나는 경우는 cnt해주지않는 경우 발생... (예제 2)
+            // <-- 수정) 를 위해 위에 적었더니(도달하면 바로 끝낼 수 있도록) 
+            // 마지막 도달 위치에서 충돌나는 경우는 cnt해주지않는 경우 발생... (예제 2)
             if (curr.r == end.r && curr.c == end.c) return;
 
             int nr = curr.r;
@@ -71,11 +73,13 @@ class Solution {
             time++; // 이동할 때마다 time 증가
         }
     }
+    
     static void print(){  // 디버깅을 위해 출력 
         for(Integer key  : locMap.keySet()){
             System.out.println(key+"초 일 때: "+locMap.get(key));
         }
     }
+    
     public int solution(int[][] points, int[][] routes) {
         // 1. 포인트 위치 매핑
         for (int i = 0; i < points.length; i++) {
@@ -99,17 +103,17 @@ class Solution {
 
         // 3. 충돌 횟수 계산 (같은 시간에 같은 위치에 있는 경우만 체크)
         int answer = 0;
-        for (List<Location> locs : locMap.values()) {
-            HashMap<String, Integer> posCount = new HashMap<>();
+        for (List<Location> locs : locMap.values()) { // 같은 시간에 대해서 
+            HashMap<String, Integer> cnt = new HashMap<>(); // 위치별 존재하는 로봇 대수 저장 
 
             for (Location loc : locs) {
                 String key = loc.r + "_" + loc.c;
-                posCount.put(key, posCount.getOrDefault(key, 0) + 1);
+                cnt.put(key, cnt.getOrDefault(key, 0) + 1);
             }
 
-            for (int count : posCount.values()) {
+            for (int count : cnt.values()) { // 같은 위치에 여러대가 존재하면 
                 if (count > 1) {
-                    // 같은시간,같은 위치에 로봇이 2대 이상 존재하면 충돌위험+1
+                    // --> 같은시간,같은 위치에 로봇이 2대 이상 존재하면 충돌위험+1
                     answer += 1;
                 }
             }
