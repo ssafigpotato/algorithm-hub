@@ -3,8 +3,10 @@
 import java.util.*;
 
 public class Main {
-    static int N,M;
-    static int[][]map;
+    static int N,M; // N*N크기의 맵, 뽑아야하는 치킨집 개수
+    static int[][]map; // 지도
+    static List<location> chicken = new ArrayList<>(); // 치킨집 전체 저장
+    static List<location> house = new ArrayList<>(); // 집 전체 저장
     static class location{
         int r,c;
         location(int r, int c){
@@ -12,21 +14,21 @@ public class Main {
             this.c = c;
         }
     }
-    static location[] pick;
-    static int[]dr = {-1,0,1,0};
+    static location[] pick; // 뽑은 치킨집 조합을 저장
+    static int[]dr = {-1,0,1,0}; // 델타배열
     static int[]dc = {0,1,0,-1};
-    static int min = Integer.MAX_VALUE;
-    // list.size()개의 치킨집 중에 M개를 뽑아서 -> 조합
+    static int min = Integer.MAX_VALUE; // 최종적으로 구해야할 치킨거리의 최솟값
+    // 1. list.size()개의 치킨집 중에 M개를 뽑아서 -> 조합
     // 도시의 치킨거리를 구하기
-    static void combination(List<location> chicken, int at, int depth){
+    static void combination( int at, int depth){
         if(depth == M){ // M개의 치킨집을 선택했으면
-            bfs();
+            bfs(); // bfs를 돌려서 각 조합의 치킨거리 중 최솟값 구하기
             return;
         }
 
         for(int i = at; i < chicken.size(); i++){
             pick[depth] = chicken.get(i);
-            combination(chicken, i+1, depth+1);
+            combination(i+1, depth+1);
         }
     }
     static void bfs(){
@@ -42,7 +44,9 @@ public class Main {
             distance[c.r][c.c] = 0;
         }
 
-
+        // 큐에 넣어서 한 번에 돌리므로 각 치킨집으로부터 각 가정집까지 최솟값이 저장됨 -> 3차원 토마토 풀이 참고!
+        // 큐에 들어간 치킨집들부터 우선적으로 계산되기 때문에 더 큰값이 distance에 저장되지 않으려나 하는 우려는 ㄴㄴ
+        // (큐에 들어간 순서가 영향이 없음! 그냥 한번에 배달 시작한다고 생각하면됨)
         while(!que.isEmpty()){
             location curr = que.poll();
 
@@ -52,6 +56,7 @@ public class Main {
 
                 if(nr>= 0 && nr <N && nc>= 0 && nc <N){
 //                    if(!visited[nr][nc] && map[nr][nc] != 2){ // 방문하지 않았고, 치킨집이 아니면
+//                    <-- map[nr][nc] != 2 이 조건때문에 예제 4의 경우 4번째열은 계산되지 않았음!
                     if(!visited[nr][nc]){
                         que.offer(new location(nr, nc));
                         visited[nr][nc] = true;
@@ -62,14 +67,13 @@ public class Main {
             }
         }
 
-        for(location h : house){
+        for(location h : house){  // 각 집에 저장된 거리를 모두 더하면 해당 조합에서 얻은 치킨 거리가 나옴!
             total += distance[h.r][h.c];
         }
-        min = Math.min(min, total); // 각 조합 중 최솟값 갱신
+        min = Math.min(min, total); // 위에서 계산된 조합들 중 bfs를 돌때마다 가장 최솟값으로 갱신
 
     }
-    static List<location> chicken = new ArrayList<>();
-    static List<location> house = new ArrayList<>();
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         N = sc.nextInt(); //N*N
@@ -90,9 +94,9 @@ public class Main {
 
         // 0. 치킨집을 고르는 로직 -> combination
         // 1. 1일 때 bfs를 돌리기
-        // 2. 각 치킨집 조합에 대해 그 때의 치킨거리를 구하기
+        // 2. 각 치킨집 조합에 대해 그 때의 치킨거리를 구하기 -> 최솟값 갱신
 
-        combination(chicken, 0,0);
+        combination( 0,0);
         System.out.println(min);
 
     }
